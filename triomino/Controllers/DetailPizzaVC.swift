@@ -84,6 +84,7 @@ class DetailPizzaVC: UIViewController {
             
         }
     }
+     // MARK: GESTION EVENEMENTS SUR LA VUE
     // Cette méthode permet de selectionner un type de pâte
     @IBAction func onClickSelectorPate(_ sender: UISegmentedControl) {
         // On s'assure qu'il y a bien une pizza qui est commandable de chargée!

@@ -13,7 +13,7 @@
 import UIKit
 
 
-class CartVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class CartVC: UIViewController{
     
     // MARK: PROPRIETES DE LA CLASSE
     var delegate: ICartDelegate?
@@ -41,6 +41,9 @@ class CartVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
             labelPrixAddition.text = "0 €"
         }
         checkIfCartEmpty()
+        boutonCommander.layer.cornerRadius = 5
+        boutonCommander.layer.borderWidth = 2
+        boutonCommander.layer.borderColor = UIColor.white.cgColor
     }
     // Passage des informations lors du déclenchement du segue par le click sur le bouton Commander
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,7 +56,7 @@ class CartVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     }
     // Cette méthode permet d'activer et desactiver le bouton et cacher ou non le texte "VIDE" suivant le contenu du panier
     fileprivate func checkIfCartEmpty() {
-        if delegate!.getCart()!.getPizzaList().count == 0
+        if delegate!.getCart()!.count() == 0
         {
             self.labelVIde.isHidden = false
             boutonCommander.isEnabled = false
@@ -68,32 +71,11 @@ class CartVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
 
     
-    // MARK: IMPLEMENTATION INTERFACE ,UITableViewDataSource,UITableViewDelegate
-    // Returns: nombre de cellule Pizza dans la Tableview
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.delegate!.getCart()!.getPizzaList().count
-    }
     
-    // Returns: Une cellule Pizza de la Tableview
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = pizzaListTableView.dequeueReusableCell(withIdentifier: "PizzaCartViewCell", for: indexPath) as!PizzaPanierViewCell
-        cell.updateContent(with:  delegate!.getCart()!.getPizzaById(pizzaId: indexPath.row))
-        return cell
-    }
-    
-    // Permet de supprimer une des pizzas du panier par un swift.
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete
-        {
-            self.delegate!.removePizzaInCart(pizzaId: indexPath.row)
-            self.labelPrixAddition.text = "\(String(describing: self.delegate!.getCart()!.calculPrix())) €"
-            self.pizzaListTableView.reloadSections([0], with: .automatic)
-        }
-    }
     // MARK GESTION EVENEMENTS SUR LA VUE
     // Cette méthode gere le click sur "vider" pour effacer tout ce qu'il y a dans le pannier.
-    @IBAction func onClickClearCart(_ sender: UIButton) {
-        
+    @IBAction func onClickTrashClearCart(_ sender: UIButton)
+    {
         print("Click Pour vider le panier, il y a \(String(describing: self.delegate?.getCart()!.getPizzaList().count)) pizzas dans le panier.")
         pizzaListTableView.reloadSections([0], with: .automatic)
         let alert : UIAlertController = UIAlertController(title: "Vider le pannier", message: "Voulez-vous supprimer le contenu de votre panier?", preferredStyle: UIAlertController.Style.alert)
@@ -118,5 +100,29 @@ class CartVC: UIViewController,UITableViewDataSource,UITableViewDelegate {
     }
     
 }
-
+extension CartVC: UITableViewDataSource,UITableViewDelegate
+{
+    // MARK: IMPLEMENTATION INTERFACE ,UITableViewDataSource,UITableViewDelegate
+    // Returns: nombre de cellule Pizza dans la Tableview
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.delegate!.getCart()!.getPizzaList().count
+    }
+    
+    // Returns: Une cellule Pizza de la Tableview
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = pizzaListTableView.dequeueReusableCell(withIdentifier: "PizzaCartViewCell", for: indexPath) as!PizzaPanierViewCell
+        cell.updateContent(with:  delegate!.getCart()!.getPizzaById(pizzaId: indexPath.row))
+        return cell
+    }
+    
+    // Permet de supprimer une des pizzas du panier par un swift.
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete
+        {
+            self.delegate!.removePizzaInCart(pizzaId: indexPath.row)
+            self.labelPrixAddition.text = "\(String(describing: self.delegate!.getCart()!.calculPrix())) €"
+            self.pizzaListTableView.reloadSections([0], with: .automatic)
+        }
+    }
+}
 

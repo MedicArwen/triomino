@@ -6,6 +6,9 @@
 //  Copyright © 2019 Networked Hells. All rights reserved.
 // La classe PizzaOrdered représente une pizza commandée par l'utilisateur.
 // Elle hérite de la classe Pizza et ajoute les options propres à la commande (taille et type de la pâte)
+// j'ai fais ce choix pour permettre d'avoir accès à toutes les informations directement aux données de la classe mère
+// On peut ainsi si l'on veut, afficher la photo de la pizza. C'est discutable dans le sens ou ce n'est pas demandé dans l'exo
+// et cela entraine une plus grande consommation mémoire. D'un autre coté cela permet de manipuler l'héritage et les constructeurs
 
 import Foundation
 class PizzaOrdered: Pizza
@@ -38,13 +41,13 @@ class PizzaOrdered: Pizza
     /// Returns une chaine de caractère représentant la liste des options choisies pour cette pizza commandée
     func printOption()->String
     {
-        return "Base "+self.base.rawValue + ", pâte " + self.typePate.rawValue + ", taille " + self.size.rawValue
+        return "\(self.base.rawValue), pâte \(self.typePate.rawValue), taille \(self.size.rawValue)"
     }
     // returns le prix de la pizza commandée en fonction des options choisies (il n'y a que la taille qui change le prix)
-    func getPrice()->Int
+    func getPrice()->Double
     {
         if self.size == .Large
-        {return 2 + self.price}
+        {return 2.0 + self.price}
         else
         {return self.price}
     }

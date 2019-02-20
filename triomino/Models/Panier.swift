@@ -19,9 +19,9 @@ class Panier
     // MARK: METHODES PROPRES A LA CLASSE
     
     /// Returns le prix total de la commande de pizzas en fonction des options pour chaque pizzas
-    func calculPrix()->Int
+    func calculPrix()->Double
     {
-        var prix = 0
+        var prix = 0.0
         for pizza in pizzas
         {
             prix += pizza.getPrice()
@@ -55,5 +55,10 @@ class Panier
     func clearCart()
     {
         self.pizzas.removeAll()
+    }
+    // Returns le nombre de pizzas dans le panier
+    func count()->Int
+    {
+        return self.pizzas.count
     }
 }

@@ -17,7 +17,7 @@ class Pizza
     var description: String
     var image: String
     var name: String
-    var price: Int
+    var price: Double
     var thumb: String
     // MARK: CONSTRUCTEURS DE LA CLASSE
     
@@ -28,7 +28,7 @@ class Pizza
     ///     - name: nom de la pizza
     ///     - price: prix de base de la pizza, hors options (taille medium par défaut)
     ///     - thumb: image en taille réduire de la pizza
-    init(base: String, description: String, image: String, name: String, price: Int, thumb: String) {
+    init(base: String, description: String, image: String, name: String, price: Double, thumb: String) {
         self.base = Pizza.convertSauceStringToEnum(nomSauce: base)
         self.description = description
         self.image = image
@@ -43,7 +43,7 @@ class Pizza
     {
         self.init(base:json["base"].stringValue,description:json["description"].stringValue,
                   image:json["image"].stringValue, name:json["name"].stringValue,
-                  price:json["price"].intValue,thumb:json["thumb"].stringValue)
+                  price:json["price"].doubleValue,thumb:json["thumb"].stringValue)
         
     }
     // MARK: METHODES DE LA CLASSE

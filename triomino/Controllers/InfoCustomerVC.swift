@@ -12,9 +12,9 @@
 
 import UIKit
 
-class InfoCustomerVC: UIViewController, UITextFieldDelegate {
+class InfoCustomerVC: UIViewController {
     
-    
+    // a priori la bonne pratique; en cas de probleme, la mémoire est libérée
     var delegate: ICartDelegate?
     
     // MARK: Outlets faisant le lien avec les objets dans la vue
@@ -42,24 +42,32 @@ class InfoCustomerVC: UIViewController, UITextFieldDelegate {
         firstNameCustomerTextField.delegate = self
         phoneNumberCustomerTextField.delegate = self
         buttonValidate.isEnabled = false // par défaut on peut pas valider car le formulaire n'est pas rempli
-
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        buttonValidate.layer.cornerRadius = 5
+        buttonValidate.layer.borderWidth = 2
+        buttonValidate.layer.borderColor = UIColor.white.cgColor
+    }
+
+
+}
+extension InfoCustomerVC:UITextFieldDelegate
+{
     // MARK: methodes implémentables car le controleur hérite de UITextFieldDelegate
     // permet de fermer le clavier de saisie lorsque l'on tap en dehors dudit clavier
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            // détecte la sortie du clavier graphique
-            self.view.endEditing(true)
+        // détecte la sortie du clavier graphique
+        self.view.endEditing(true)
         
         // le bouton valider doit être desactivé si l'on a pas remplis le formulaire!
-        if nameCustomerTextField.text!.count > 3 && firstNameCustomerTextField.text!.count > 3 && phoneNumberCustomerTextField.text!.count > 8
+        if nameCustomerTextField.text!.count > 2 && firstNameCustomerTextField.text!.count > 3 && phoneNumberCustomerTextField.text!.count > 8
         {
             buttonValidate.isEnabled = true
         }
         else
         {
-             buttonValidate.isEnabled = false
+            buttonValidate.isEnabled = false
         }
     }
-
 }

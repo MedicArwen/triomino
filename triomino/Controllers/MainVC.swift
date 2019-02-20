@@ -16,13 +16,15 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-class MainVC: UIViewController,UITableViewDataSource,UITableViewDelegate,ICartDelegate {
+class MainVC: UIViewController {
     // MARK: PROPRIETES DE LA CLASSE
     var listPizzas:[Pizza] = []
     var panierPizzas:Panier = Panier()
     // MARK: OUTLETS FAISANT LE LIEN AVEC LA VUE
     @IBOutlet weak var PizzaListTableVIew: UITableView!
+    @IBOutlet weak var buttonCart: UIButton!
     
+ 
     // MARK: GESTION DES EVENEMENTS DE BASE DE LA VUE-CONTROLEUR
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,9 +32,27 @@ class MainVC: UIViewController,UITableViewDataSource,UITableViewDelegate,ICartDe
         // MainVC prend en charge la mise à jour de la TableView. Il faut donc le nommer comme delegate
         PizzaListTableVIew.delegate = self
         PizzaListTableVIew.dataSource = self
+        
     }
     override func viewWillAppear(_ animated: Bool) {
+     if panierPizzas.count() > 0
+     {
         
+        if let image = UIImage(named: "cartFull") {
+            self.buttonCart.setImage(image, for: .normal)
+        }
+        }
+        else
+     {
+        if let image = UIImage(named: "cart") {
+            self.buttonCart.setImage(image, for: .normal)
+        }
+        }
+        //self.navigationController?.isNavigationBarHidden = true
+
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+      //  self.navigationController?.isNavigationBarHidden = false
     }
     // MARK: GESTION DE LA TRANSITION VERS LES AUTRES VUES-CONTROLEURS
     // Cette méthode s'assure de faire le lien pour les délégués utilisés pour la gestion du panier.
@@ -50,6 +70,7 @@ class MainVC: UIViewController,UITableViewDataSource,UITableViewDelegate,ICartDe
         }
         
     }
+    
     // MARK: METHODES PARTICULIERES A LA CLASSE
     // Cette méthode charge les données depuis le web service et construit la liste des pizzas disponibles
     func getData()
@@ -69,6 +90,12 @@ class MainVC: UIViewController,UITableViewDataSource,UITableViewDelegate,ICartDe
             }
         }
     }
+    @IBAction func onCartButtonClick(_ sender: UIButton) {
+        performSegue(withIdentifier: "goToCart", sender: self)
+    }
+}
+extension MainVC:UITableViewDataSource,UITableViewDelegate
+{
     // MARK: IMPLEMENTATION INTERFACE ,UITableViewDataSource,UITableViewDelegate
     // Returns: nombre de cellule Pizza dans la Tableview
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -85,7 +112,9 @@ class MainVC: UIViewController,UITableViewDataSource,UITableViewDelegate,ICartDe
         performSegue(withIdentifier: "showPizza", sender: self)
         PizzaListTableVIew.deselectRow(at: indexPath, animated: false)
     }
-    
+}
+extension MainVC:ICartDelegate
+{
     // MARK: Implémentation de l'interface GetCartContentDelegate
     func getCart() -> Panier?
     {
@@ -104,5 +133,4 @@ class MainVC: UIViewController,UITableViewDataSource,UITableViewDelegate,ICartDe
         panierPizzas.remove(pizzaId: pizzaId)
     }
 }
-
 
